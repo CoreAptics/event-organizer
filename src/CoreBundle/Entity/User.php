@@ -76,7 +76,7 @@ class User implements UserInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
 
@@ -92,14 +92,14 @@ class User implements UserInterface
      *
      * @ORM\Column(name="is_active", type="boolean")
      */
-    private $isActive = FALSE;
+    private $isActive = 0;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="is_enabled", type="boolean")
      */
-    private $isEnabled = TRUE;
+    private $isEnabled = 1;
 
 
     /*********************************
@@ -278,7 +278,7 @@ class User implements UserInterface
      */
     public function setCreatedAt()
     {
-        $this->createdAt = new DateTime('now');
+        $this->createdAt = new \DateTime();
 
         return $this;
     }
@@ -304,7 +304,7 @@ class User implements UserInterface
      */
     public function setUpdatedAt()
     {
-        $this->updatedAt = new DateTime('now');
+        $this->updatedAt = new \DateTime();
 
         return $this;
     }

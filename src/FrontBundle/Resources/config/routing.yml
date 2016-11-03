@@ -1,3 +1,21 @@
 front_homepage:
     path:     /
     defaults: { _controller: FrontBundle:Default:index }
+
+front_user_register:
+    path:     /register
+    defaults: { _controller: FrontBundle:User:register }
+
+front_user_login:
+    path:     /login
+    defaults: { _controller: FrontBundle:User:login }
+
+front_user_login_check:
+    path:     /login_check
+
+front_user_logout:
+    path:     /logout
+
+front_user_activate:
+    path:     /activate/{token}
+    defaults: { _controller: FrontBundle:User:activate }
