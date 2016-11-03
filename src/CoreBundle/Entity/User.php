@@ -3,14 +3,17 @@
 namespace CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="CoreBundle\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -24,9 +27,9 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="username", type="string", length=255)
      */
-    private $name;
+    private $username;
 
     /**
      * @var string
@@ -84,7 +87,31 @@ class User
      */
     private $uid;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive = FALSE;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_enabled", type="boolean")
+     */
+    private $isEnabled = TRUE;
+
+
+    /*********************************
+     *       SETTER ET GETTER        *
+     *********************************/
+
+    public function __construct()
+    {
+        $this->isActive = true;
+        // may not be needed, see section on salt below
+        // $this->salt = md5(uniqid(null, true));
+    }
 
     /**
      * Get id
@@ -97,27 +124,27 @@ class User
     }
 
     /**
-     * Set name
+     * Set username
      *
-     * @param string $name
+     * @param string $username
      *
      * @return User
      */
-    public function setName($name)
+    public function setUsername($username)
     {
-        $this->name = $name;
+        $this->username = $username;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get username
      *
      * @return string
      */
-    public function getName()
+    public function getUsername()
     {
-        return $this->name;
+        return $this->username;
     }
 
     /**
@@ -246,10 +273,12 @@ class User
      * @param \DateTime $createdAt
      *
      * @return User
+     *
+     * @ORM\PrePersist()
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt()
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new DateTime('now');
 
         return $this;
     }
@@ -270,10 +299,12 @@ class User
      * @param \DateTime $updatedAt
      *
      * @return User
+     *
+     * @ORM\PreUpdate()
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt()
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new DateTime('now');
 
         return $this;
     }
@@ -311,4 +342,86 @@ class User
     {
         return $this->uid;
     }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     *
+     * @return User
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set isEnabled
+     *
+     * @param boolean $isEnabled
+     *
+     * @return User
+     */
+    public function setIsEnabled($isEnabled)
+    {
+        $this->isEnabled = $isEnabled;
+
+        return $this;
+    }
+
+    /**
+     * Get isEnabled
+     *
+     * @return boolean
+     */
+    public function getIsEnabled()
+    {
+        return $this->isEnabled;
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->password,
+            $this->username
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->password,
+            $this->username
+            ) = unserialize($serialized);
+    }
+
 }
