@@ -1,21 +1,34 @@
 security:
     encoders:
         CoreBundle\Entity\User: bcrypt
+        CoreBundle\Entity\Admin: bcrypt
 
 
     providers:
-        our_db_provider:
+        userProvider:
             entity:
                 class: CoreBundle:User
+        adminProvider:
+            entity:
+                class: CoreBundle:Admin
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        admin:
+            pattern:    ^/admin
+            provider: adminProvider
+            form_login:
+                login_path: back_admin_login
+                check_path: back_admin_login_check
+                default_target_path: back_homepage
+            logout: true
+            anonymous: true
         main:
             pattern:    /
-            provider: our_db_provider
+            provider: userProvider
             form_login:
                 login_path: front_user_login
                 check_path: front_user_login_check
@@ -23,7 +36,11 @@ security:
             logout: true
             anonymous: true
 
+
+
+
     access_control:
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/activate/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin$, roles: IS_AUTHENTICATED_FULLY }

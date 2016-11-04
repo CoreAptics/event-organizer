@@ -98,7 +98,7 @@ class User implements AdvancedUserInterface
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_expired", type="boolean")
+     * @ORM\Column(name="is_non_expired", type="boolean")
      */
     private $isNonExpired = 1;
 

@@ -1,3 +1,13 @@
 back_homepage:
     path:     /
     defaults: { _controller: BackBundle:Default:index }
+
+back_admin_login:
+    path:     /login
+    defaults: { _controller: BackBundle:Admin:login }
+
+back_admin_login_check:
+    path:     /login_check
+
+back_admin_logout:
+    path:     /logout
