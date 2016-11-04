@@ -49,7 +49,13 @@ swiftmailer:
     auth_mode: "%mailer_auth%"  
     spool:     { type: memory }  
 ```
+Customs commands
+==============
 
+Pour forcer la purge des utilisateurs il suffit de taper la commande suivante dans la console
+```php
+php bin/console purge:user:expired
+```
 TRES IMPORTANT
 ==============
 
