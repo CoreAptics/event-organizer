@@ -9,6 +9,10 @@ security:
                 class: CoreBundle:User
 
     firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
         main:
             pattern:    /
             provider: our_db_provider

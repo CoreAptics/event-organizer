@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function loginAction(){
         $authenticationUtils = $this->get('security.authentication_utils');
-
+        
         return $this->render('@Front/User/login.html.twig', array(
             'last_username' => $authenticationUtils->getLastUsername(),
             'error'         => $authenticationUtils->getLastAuthenticationError(),
@@ -42,7 +42,7 @@ class UserController extends Controller
                     'name'=>'tokenExpiration'
                 ));
                 $dateInSevenDays = new \DateTime();
-                $dateInSevenDays->add(new \DateInterval('P'.$tokenExpiration.'D'));
+                $dateInSevenDays->add(new \DateInterval('P'.$tokenExpiration->getValue().'D'));
                 $plainPassword = $user->getPassword();
 
 //                Encodage du MDP
@@ -52,7 +52,7 @@ class UserController extends Controller
 
 //                Définition du Token d'activation
                 $user->setToken(hash('sha256', $user->getEmail()));
-                $user->setTokenExpiredAt(new \DateTime(''));
+                $user->setTokenExpiredAt($dateInSevenDays);
 
 //                Désactivation du compte
                 $user->setIsActive(FALSE);
@@ -81,6 +81,11 @@ class UserController extends Controller
                 $this->get('mailer')->send($message);
 
                 return $this->redirectToRoute('front_homepage');
+            } else {
+                return $this->render('@Front/User/register.html.twig', array(
+                    'message'=> 'Email déjà prit',
+                    'form'=>$form->createView()
+                ));
             }
         }
 
@@ -95,18 +100,26 @@ class UserController extends Controller
             'token'=>$token
         ));
 
-        if ($user == null or $user->getIsActive() == TRUE){
-            return $this->render('@Front/User/info.html.twig', array(
-                'message'=>'Utilisateur introuvable ou token expiré'
-            ));
+        if ($user->getIsActive() == 0 and $user->getIsEnabled() == 1){
+            $user->setIsActive(true);
+            $em->flush();
+            return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte a été activé avec succès.'));
+
+
+        } elseif ($user->getIsActive() == 0 and $user->getIsEnabled() == 0){
+            return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte est bloqué et désactivé suite à une trop grande inactivité, contactez-nous pour plus d\'informations.'));
+
+
+        } elseif ($user->getIsActive() == 1 and $user->getIsEnabled() == 0){
+            return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte est activé mais bloqué suite à une trop grande inactivité, contactez-nous pour plus d\'informations.'));
+
+
+        } elseif ($user->getIsActive() == 1){
+            return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte est déjà activé.'));
+
+
+        } else {
+            return $this->render('@Front/User/info.html.twig', array('message'=>'Erreur inconnue.'));
         }
-
-        $user->setIsActive(TRUE);
-        $user->setToken(null);
-        $em->flush();
-
-        return $this->render('@Front/User/info.html.twig', array(
-            'message'=>'Votre compte est désormais activé'
-        ));
     }
 }

@@ -3,6 +3,7 @@
 namespace CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
  * @ORM\Entity(repositoryClass="CoreBundle\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class User implements UserInterface
+class User implements AdvancedUserInterface
 {
     /**
      * @var int
@@ -97,9 +98,9 @@ class User implements UserInterface
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_enabled", type="boolean")
+     * @ORM\Column(name="is_expired", type="boolean")
      */
-    private $isEnabled = 1;
+    private $isExpired = 1;
 
 
     /*********************************
@@ -367,29 +368,6 @@ class User implements UserInterface
         return $this->isActive;
     }
 
-    /**
-     * Set isEnabled
-     *
-     * @param boolean $isEnabled
-     *
-     * @return User
-     */
-    public function setIsEnabled($isEnabled)
-    {
-        $this->isEnabled = $isEnabled;
-
-        return $this;
-    }
-
-    /**
-     * Get isEnabled
-     *
-     * @return boolean
-     */
-    public function getIsEnabled()
-    {
-        return $this->isEnabled;
-    }
 
     public function getSalt()
     {
@@ -406,12 +384,33 @@ class User implements UserInterface
     {
     }
 
+    public function isAccountNonExpired()
+    {
+        return $this->isExpired;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->isActive;
+    }
+
     public function serialize()
     {
         return serialize(array(
             $this->id,
             $this->password,
-            $this->username
+            $this->username,
+            $this->isActive
         ));
     }
 
@@ -420,7 +419,8 @@ class User implements UserInterface
         list (
             $this->id,
             $this->password,
-            $this->username
+            $this->username,
+            $this->isActive
             ) = unserialize($serialized);
     }
 
