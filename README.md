@@ -29,3 +29,23 @@ des paramètres généraux.
 
 PRO TIPS: Editez le fichier csv avec OpenOffice Calc et pensez à overwrite les paramètres d'enregistrement pour que l'encodage soit bien en UTF-8 et que les caractères de sépartion soit des ; et ceux de texte
 ".
+
+Pensez à configurer votre serveur de mail dans parameters.yml
+
+<code>
+mailer_transport: gmail  
+mailer_user: adress.tmail@gmail.com  
+mailer_password: xxxxxxx  
+mailer_auth: login  
+</code>
+
+Ainsi que le config.yml
+
+<code>
+swiftmailer:  
+    transport: "%mailer_transport%"  
+    username:  "%mailer_user%"  
+    password:  "%mailer_password%"  
+    auth_mode: "%mailer_auth%"  
+    spool:     { type: memory }  
+</code>
