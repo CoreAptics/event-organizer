@@ -125,8 +125,7 @@ class UserController extends Controller
         if ($user == null){
             return $this->render('@Front/User/info.html.twig', array('message'=>'Compte inexistant ou déjà activé.'));
         }
-        dump($user->isEnabled());
-        dump($user->isAccountNonExpired());
+
         if ($user->isEnabled() == false and $user->isAccountNonExpired() == true){
             $user->setTokenExpiredAt(null);
             $user->setToken(null);
@@ -247,7 +246,7 @@ class UserController extends Controller
 
         }
 
-        if ($user == null or $user->getIsActive() == FALSE){
+        if ($user == null or $user->isEnabled() == FALSE){
             return $this->redirectToRoute('front_user_login', array(
                 'message'=>'Utilisateur introuvable ou désactivé'
             ));

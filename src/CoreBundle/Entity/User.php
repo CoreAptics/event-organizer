@@ -426,4 +426,28 @@ class User implements AdvancedUserInterface
             ) = unserialize($serialized);
     }
 
+
+    /**
+     * Set isNonExpired
+     *
+     * @param boolean $isNonExpired
+     *
+     * @return User
+     */
+    public function setIsNonExpired($isNonExpired)
+    {
+        $this->isNonExpired = $isNonExpired;
+
+        return $this;
+    }
+
+    /**
+     * Get isNonExpired
+     *
+     * @return boolean
+     */
+    public function getIsNonExpired()
+    {
+        return $this->isNonExpired;
+    }
 }
