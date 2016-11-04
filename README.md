@@ -49,3 +49,12 @@ swiftmailer:
     auth_mode: "%mailer_auth%"  
     spool:     { type: memory }  
 ```
+
+TRES IMPORTANT
+==============
+
+A chaque pull réaliser il faut impérativement penser à mettre à jour la base de données, sous peine de se prendre des erreurs
+
+```php
+php bin/console doctrine:schema:update --force
+```
