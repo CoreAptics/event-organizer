@@ -100,7 +100,7 @@ class User implements AdvancedUserInterface
      *
      * @ORM\Column(name="is_expired", type="boolean")
      */
-    private $isExpired = 1;
+    private $isNonExpired = 1;
 
 
     /*********************************
@@ -386,7 +386,7 @@ class User implements AdvancedUserInterface
 
     public function isAccountNonExpired()
     {
-        return $this->isExpired;
+        return $this->isNonExpired;
     }
 
     public function isAccountNonLocked()
@@ -410,7 +410,8 @@ class User implements AdvancedUserInterface
             $this->id,
             $this->password,
             $this->username,
-            $this->isActive
+            $this->isActive,
+            $this->isNonExpired
         ));
     }
 
@@ -420,7 +421,8 @@ class User implements AdvancedUserInterface
             $this->id,
             $this->password,
             $this->username,
-            $this->isActive
+            $this->isActive,
+            $this->isNonExpired
             ) = unserialize($serialized);
     }
 

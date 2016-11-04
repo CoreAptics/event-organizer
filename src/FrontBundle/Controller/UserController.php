@@ -99,23 +99,25 @@ class UserController extends Controller
         $user = $em->getRepository('CoreBundle:User')->findOneBy(array(
             'token'=>$token
         ));
-
-        if ($user->getIsActive() == 0 and $user->getIsEnabled() == 1){
+        if ($user == null){
+            return $this->render('@Front/User/info.html.twig', array('message'=>'Compte inexistant ou déjà activé.'));
+        }
+        dump($user->isEnabled());
+        dump($user->isAccountNonExpired());
+        if ($user->isEnabled() == false and $user->isAccountNonExpired() == true){
+            $user->setTokenExpiredAt(null);
+            $user->setToken(null);
             $user->setIsActive(true);
             $em->flush();
             return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte a été activé avec succès.'));
 
 
-        } elseif ($user->getIsActive() == 0 and $user->getIsEnabled() == 0){
+        } elseif ($user->isEnabled() == false and $user->isAccountNonExpired() == false){
             return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte est bloqué et désactivé suite à une trop grande inactivité, contactez-nous pour plus d\'informations.'));
 
 
-        } elseif ($user->getIsActive() == 1 and $user->getIsEnabled() == 0){
+        } elseif ($user->isEnabled() and $user->isAccountNonExpired() == false){
             return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte est activé mais bloqué suite à une trop grande inactivité, contactez-nous pour plus d\'informations.'));
-
-
-        } elseif ($user->getIsActive() == 1){
-            return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte est déjà activé.'));
 
 
         } else {

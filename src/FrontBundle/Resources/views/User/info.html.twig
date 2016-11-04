@@ -1,8 +1,5 @@
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12 bg-white p30">
-            <a href="{{ path('front_homepage') }}">Retour</a>
-            <div>{{ message }}</div>
-        </div>
-    </div>
-</div>
+{% extends 'base.html.twig' %}
+{% block body %}
+    <a href="{{ path('front_homepage') }}">Retour</a>
+    <div>{{ message }}</div>
+{% endblock %}
