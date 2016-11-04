@@ -19,3 +19,11 @@ front_user_logout:
 front_user_activate:
     path:     /activate/{token}
     defaults: { _controller: FrontBundle:User:activate }
+
+front_user_forget_pass:
+    path:     /forget
+    defaults: { _controller: FrontBundle:User:forget }
+
+front_user_reset:
+    path:     /reset/{token}
+    defaults: { _controller: FrontBundle:User:reset }

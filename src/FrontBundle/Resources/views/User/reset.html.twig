@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    {% if error is defined %}
+        <div>{{ error }}</div>
+    {% endif %}
+    <form action="{{ path('front_user_reset', {'token': token}) }}" method="POST">
+        <label for="password">Mot de Passe:</label>
+        <input type="password" id="password" name="_password" />
+
+        <label for="password">Mot de Passe:</label>
+        <input type="password" id="password" name="_repeated_password" />
+
+        <button type="submit">Valider</button>
+    </form>
+{% endblock %}

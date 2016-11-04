@@ -19,6 +19,20 @@ class UserController extends Controller
         ));
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
@@ -94,6 +108,15 @@ class UserController extends Controller
         ));
     }
 
+
+
+
+
+
+
+
+
+
     public function activateAction(Request $request, $token){
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('CoreBundle:User')->findOneBy(array(
@@ -123,5 +146,114 @@ class UserController extends Controller
         } else {
             return $this->render('@Front/User/info.html.twig', array('message'=>'Erreur inconnue.'));
         }
+    }
+
+
+
+
+
+
+
+
+
+
+    public function forgetAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        if ($request->isMethod('POST')){
+
+            $user = $em->getRepository('CoreBundle:User')->findOneBy(array(
+                'email'=>$request->get('_email')
+            ));
+
+            if ($user == null){
+                return $this->render('FrontBundle:User:forget.html.twig', array(
+                    'error'=>'Compte utilisateur inexistant'
+                ));
+            } elseif ($user->isEnabled() == false) {
+                return $this->render('FrontBundle:User:forget.html.twig', array(
+                    'error'=>'Compte existant mais désactivé'
+                ));
+            } elseif ($user->isAccountNonExpired() == false) {
+                return $this->render('FrontBundle:User:forget.html.twig', array(
+                    'error'=>'Compte existant mais expiré'
+                ));
+            } else {
+                $user->setToken(hash('sha256', $user->getUsername()));
+                $em->flush();
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Réinitialisation de votre mot de passe')
+                    ->setFrom('alexei.taupiot@gmail.com')
+                    ->setTo($user->getEmail())
+                    ->setBody($this->renderView(
+                        'Emails/forget_pass.html.twig',
+                        array(
+                            'token'=>$this->generateUrl('front_user_reset', array(
+                                'token'=>$user->getToken()
+                            ), UrlGeneratorInterface::ABSOLUTE_URL)
+                        )
+                    ),
+                        'text/html'
+                    );
+
+                $this->get('mailer')->send($message);
+                return $this->render('FrontBundle:User:forget.html.twig', array(
+                    'error'=>'Un email vient d\'être envoyé sur : '.$user->getUsername()
+                ));
+            }
+        }
+        return $this->render('FrontBundle:User:forget.html.twig');
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public function resetAction(Request $request, $token){
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('CoreBundle:User')->findOneBy(array(
+            'token'=>$token
+        ));
+
+        if ($request->isMethod('POST')) {
+            if ($request->get('_password') == $request->get('_repeated_password')){
+
+                $password = $this->get('security.password_encoder')->encodePassword($user, $request->get('_password'));
+                $user->setPassword($password);
+                $user->setToken(null);
+                $em->persist($user);
+                $em->flush();
+                return $this->render('FrontBundle:User:info.html.twig', array(
+                    'message'=>'Mot de passe réinitialisé'
+                ));
+            } else {
+                return $this->render('FrontBundle:User:reset.html.twig', array(
+                    'token'=>$token,
+                    'error'=>'Les champs ne sont pas identiques'
+                ));
+            }
+
+        }
+
+        if ($user == null or $user->getIsActive() == FALSE){
+            return $this->redirectToRoute('front_user_login', array(
+                'message'=>'Utilisateur introuvable ou désactivé'
+            ));
+        }
+        if ($user->getToken() == null){
+            $this->redirectToRoute('front_user_login', array(
+                'message'=>'Token introuvable'
+            ));
+        }
+
+        return $this->render('FrontBundle:User:reset.html.twig', array(
+            'token'=>$token
+        ));
     }
 }
