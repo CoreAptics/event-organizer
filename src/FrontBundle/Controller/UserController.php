@@ -178,7 +178,13 @@ class UserController extends Controller
                     'error'=>'Compte existant mais expiré'
                 ));
             } else {
+                $tokenExpiration = $em->getRepository('CoreBundle:Parameter')->findOneBy(array(
+                    'name'=>'tokenExpiration'
+                ));
+                $dateInSevenDays = new \DateTime();
+                $dateInSevenDays->add(new \DateInterval('P'.$tokenExpiration->getValue().'D'));
                 $user->setToken(hash('sha256', $user->getUsername()));
+                $user->setTokenExpiredAt($dateInSevenDays);
                 $em->flush();
 
                 $message = \Swift_Message::newInstance()
