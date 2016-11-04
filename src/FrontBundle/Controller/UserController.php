@@ -183,7 +183,7 @@ class UserController extends Controller
                 ));
                 $dateInSevenDays = new \DateTime();
                 $dateInSevenDays->add(new \DateInterval('P'.$tokenExpiration->getValue().'D'));
-                $user->setToken(hash('sha256', $user->getUsername()));
+                $user->setToken(hash('sha256', $user->getEmail()));
                 $user->setTokenExpiredAt($dateInSevenDays);
                 $em->flush();
 
