@@ -1,6 +1,6 @@
 back_homepage:
     path:     /
-    defaults: { _controller: BackBundle:Default:index }
+    defaults: { _controller: BackBundle:Dashboard:index }
 
 back_admin_login:
     path:     /login

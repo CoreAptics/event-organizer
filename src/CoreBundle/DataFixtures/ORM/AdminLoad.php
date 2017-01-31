@@ -32,7 +32,7 @@ class LoadAdminData extends AbstractFixture implements OrderedFixtureInterface, 
         $encoder = $this->container->get('security.password_encoder');
         $encodedPass = $encoder->encodePassword($admin, $plainPass);
         $admin->setPassword($encodedPass);
-        $admin->setEmail('alexei.taupiot@gmail.com');
+        $admin->setEmail('test@test.com');
 
         $manager->persist($admin);
         $manager->flush();

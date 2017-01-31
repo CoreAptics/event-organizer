@@ -9,7 +9,7 @@ class AdminController extends Controller
     public function loginAction(){
         $authenticationUtils = $this->get('security.authentication_utils');
 
-        return $this->render('@Front/User/login.html.twig', array(
+        return $this->render('BackBundle:Admin:login.html.twig', array(
             'last_username' => $authenticationUtils->getLastUsername(),
             'error'         => $authenticationUtils->getLastAuthenticationError(),
         ));
