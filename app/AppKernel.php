@@ -18,6 +18,8 @@ class AppKernel extends Kernel
             new CoreBundle\CoreBundle(),
             new BackBundle\BackBundle(),
             new FrontBundle\FrontBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

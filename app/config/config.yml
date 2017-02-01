@@ -69,3 +69,16 @@ swiftmailer:
     password:  "%mailer_password%"
     auth_mode: "%mailer_auth%"
     spool:     { type: memory }
+
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+
+stof_doctrine_extensions:
+    default_locale: fr
+    orm:
+        default:
+            sluggable: true
+            timestampable: true
