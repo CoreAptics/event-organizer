@@ -27,17 +27,17 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
     public function load(ObjectManager $manager)
     {
         $user = new User();
-        $admin->setUsername('Test');
-        $admin->setFirstname('Test');
-        $admin->setIsActive(1);
-        $admin->setUid('UID1');
+        $user->setUsername('Test');
+        $user->setFirstname('Test');
+        $user->setIsActive(1);
+        $user->setUid('UID1');
         $plainPass = 'test';
         $encoder = $this->container->get('security.password_encoder');
-        $encodedPass = $encoder->encodePassword($admin, $plainPass);
-        $admin->setPassword($encodedPass);
-        $admin->setEmail('test@test.com');
+        $encodedPass = $encoder->encodePassword($user, $plainPass);
+        $user->setPassword($encodedPass);
+        $user->setEmail('test@test.com');
 
-        $manager->persist($admin);
+        $manager->persist($user);
         $manager->flush();
     }
     public function getOrder()
