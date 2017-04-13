@@ -109,3 +109,14 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Ignore sass cache files
+.sass-cache
+
+# Ignore node
+node_modules
+node_modules/*
+npm-debug.log
+
+# Ignore virtual studio
+.vscode
