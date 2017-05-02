@@ -93,14 +93,14 @@ class User implements AdvancedUserInterface
      *
      * @ORM\Column(name="is_active", type="boolean")
      */
-    private $isActive = 0;
+    private $active = 0;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="is_non_expired", type="boolean")
      */
-    private $isNonExpired = 1;
+    private $nonExpired = 1;
 
 
     /*********************************
@@ -109,7 +109,7 @@ class User implements AdvancedUserInterface
 
     public function __construct()
     {
-        $this->isActive = true;
+        $this->active = true;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
     }
@@ -347,13 +347,13 @@ class User implements AdvancedUserInterface
     /**
      * Set isActive
      *
-     * @param boolean $isActive
+     * @param boolean $active
      *
      * @return User
      */
-    public function setIsActive($isActive)
+    public function setIsActive($active)
     {
-        $this->isActive = $isActive;
+        $this->active = $active;
 
         return $this;
     }
@@ -365,7 +365,7 @@ class User implements AdvancedUserInterface
      */
     public function getIsActive()
     {
-        return $this->isActive;
+        return $this->active;
     }
 
 
@@ -386,7 +386,7 @@ class User implements AdvancedUserInterface
 
     public function isAccountNonExpired()
     {
-        return $this->isNonExpired;
+        return $this->nonExpired;
     }
 
     public function isAccountNonLocked()
@@ -401,7 +401,7 @@ class User implements AdvancedUserInterface
 
     public function isEnabled()
     {
-        return $this->isActive;
+        return $this->active;
     }
 
     public function serialize()
@@ -410,8 +410,8 @@ class User implements AdvancedUserInterface
             $this->id,
             $this->password,
             $this->username,
-            $this->isActive,
-            $this->isNonExpired
+            $this->active,
+            $this->nonExpired
         ));
     }
 
@@ -421,22 +421,22 @@ class User implements AdvancedUserInterface
             $this->id,
             $this->password,
             $this->username,
-            $this->isActive,
-            $this->isNonExpired
+            $this->active,
+            $this->nonExpired
             ) = unserialize($serialized);
     }
 
 
     /**
-     * Set isNonExpired
+     * Set nonExpired
      *
-     * @param boolean $isNonExpired
+     * @param boolean $nonExpired
      *
      * @return User
      */
-    public function setIsNonExpired($isNonExpired)
+    public function setIsNonExpired($nonExpired)
     {
-        $this->isNonExpired = $isNonExpired;
+        $this->nonExpired = $nonExpired;
 
         return $this;
     }
@@ -448,6 +448,6 @@ class User implements AdvancedUserInterface
      */
     public function getIsNonExpired()
     {
-        return $this->isNonExpired;
+        return $this->nonExpired;
     }
 }
