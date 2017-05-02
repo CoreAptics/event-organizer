@@ -126,7 +126,7 @@ class UserController extends Controller
             return $this->render('@Front/User/info.html.twig', array('message'=>'Compte inexistant ou déjà activé.'));
         }
 
-        if ($user->isEnabled() == false and $user->isAccountNonExpired() == true){
+        if ($user->isEnabled() === false && $user->isAccountNonExpired() === true){
             $user->setTokenExpiredAt(null);
             $user->setToken(null);
             $user->setIsActive(true);
@@ -134,7 +134,7 @@ class UserController extends Controller
             return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte a été activé avec succès.'));
 
 
-        } elseif ($user->isEnabled() == false and $user->isAccountNonExpired() == false){
+        } elseif ($user->isEnabled() === false && $user->isAccountNonExpired() === false){
             return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte est bloqué et désactivé suite à une trop grande inactivité, contactez-nous pour plus d\'informations.'));
 
 
@@ -246,7 +246,7 @@ class UserController extends Controller
 
         }
 
-        if ($user == null or $user->isEnabled() == FALSE){
+        if ($user == null || $user->isEnabled() === FALSE){
             return $this->redirectToRoute('front_user_login', array(
                 'message'=>'Utilisateur introuvable ou désactivé'
             ));
