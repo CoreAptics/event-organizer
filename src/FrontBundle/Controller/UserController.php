@@ -42,15 +42,11 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
-
-
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()){
             $userToCompare = $em->getRepository('CoreBundle:User')->findOneBy(array(
                 'email'=>$user->getEmail()
             ));
-
             if($userToCompare === null){
-
 //                Initialisation des variables
                 $tokenExpiration = $em->getRepository('CoreBundle:Parameter')->findOneBy(array(
                     'name'=>'tokenExpiration'
@@ -58,23 +54,18 @@ class UserController extends Controller
                 $dateInSevenDays = new \DateTime();
                 $dateInSevenDays->add(new \DateInterval('P'.$tokenExpiration->getValue().'D'));
                 $plainPassword = $user->getPassword();
-
 //                Encodage du MDP
                 $encoder = $this->get('security.password_encoder');
                 $encodedPassword = $encoder->encodePassword($user,$plainPassword);
                 $user->setPassword($encodedPassword);
-
 //                Définition du Token d'activation
                 $user->setToken(hash('sha256', $user->getEmail()));
                 $user->setTokenExpiredAt($dateInSevenDays);
-
 //                Désactivation du compte
                 $user->setActive(FALSE);
-
 //                Persistance de l'entité
                 $em->persist($user);
                 $em->flush();
-
 //                Création d'une instance de message
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Activation de votre compte')
@@ -91,9 +82,7 @@ class UserController extends Controller
                     ),
                         'text/html'
                     );
-
                 $this->get('mailer')->send($message);
-
                 return $this->redirectToRoute('front_homepage');
             } else {
                 return $this->render('@Front/User/register.html.twig', array(
@@ -102,7 +91,6 @@ class UserController extends Controller
                 ));
             }
         }
-
         return $this->render('@Front/User/register.html.twig',array(
             'form'=>$form->createView()
         ));
