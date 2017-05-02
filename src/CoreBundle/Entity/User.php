@@ -359,7 +359,7 @@ class User implements AdvancedUserInterface
      *
      * @return boolean
      */
-    public function getIsActive()
+    public function getActive()
     {
         return $this->active;
     }
