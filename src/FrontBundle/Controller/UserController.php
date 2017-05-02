@@ -3,7 +3,7 @@
 namespace FrontBundle\Controller;
 
 use CoreBundle\Entity\User;
-use CoreBundle\Form\UserType;
+use CoreBundle\Form\Type\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
