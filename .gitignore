@@ -1,8 +1,4 @@
-# Cache and logs (Symfony2)
-/app/cache/*
-/app/logs/*
-!app/cache/.gitkeep
-!app/logs/.gitkeep
+
 
 # Upload folder
 /web/upload/*
@@ -65,10 +61,6 @@
 
 # OSX
 # =========================
-
-.DS_Store
-.AppleDouble
-.LSOverride
 
 # Thumbnails
 ._*
