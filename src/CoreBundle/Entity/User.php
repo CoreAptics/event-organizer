@@ -430,7 +430,7 @@ class User implements AdvancedUserInterface
      *
      * @return User
      */
-    public function setIsNonExpired($nonExpired)
+    public function setNonExpired($nonExpired)
     {
         $this->nonExpired = $nonExpired;
 
@@ -442,7 +442,7 @@ class User implements AdvancedUserInterface
      *
      * @return boolean
      */
-    public function getIsNonExpired()
+    public function isNonExpired()
     {
         return $this->nonExpired;
     }

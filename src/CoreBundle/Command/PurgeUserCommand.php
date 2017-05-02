@@ -28,7 +28,7 @@ class PurgeUserCommand extends ContainerAwareCommand
             ->getQuery()->getResult();
 
         foreach ($listUser as $user){
-            $user->setIsNonExpired(false);
+            $user->setNonExpired(false);
         }
         $em->flush();
 
