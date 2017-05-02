@@ -49,7 +49,7 @@ class UserController extends Controller
                 'email'=>$user->getEmail()
             ));
 
-            if($userToCompare == null){
+            if($userToCompare === null){
 
 //                Initialisation des variables
                 $tokenExpiration = $em->getRepository('CoreBundle:Parameter')->findOneBy(array(
@@ -122,7 +122,7 @@ class UserController extends Controller
         $user = $em->getRepository('CoreBundle:User')->findOneBy(array(
             'token'=>$token
         ));
-        if ($user == null){
+        if ($user === null){
             return $this->render('@Front/User/info.html.twig', array('message'=>'Compte inexistant ou déjà activé.'));
         }
 
@@ -138,7 +138,7 @@ class UserController extends Controller
             return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte est bloqué et désactivé suite à une trop grande inactivité, contactez-nous pour plus d\'informations.'));
 
 
-        } elseif ($user->isEnabled() and $user->isAccountNonExpired() == false){
+        } elseif ($user->isEnabled() && $user->isAccountNonExpired() === false){
             return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte est activé mais bloqué suite à une trop grande inactivité, contactez-nous pour plus d\'informations.'));
 
 
@@ -164,15 +164,15 @@ class UserController extends Controller
                 'email'=>$request->get('_email')
             ));
 
-            if ($user == null){
+            if ($user === null){
                 return $this->render('FrontBundle:User:forget.html.twig', array(
                     'error'=>'Compte utilisateur inexistant'
                 ));
-            } elseif ($user->isEnabled() == false) {
+            } elseif ($user->isEnabled() === false) {
                 return $this->render('FrontBundle:User:forget.html.twig', array(
                     'error'=>'Compte existant mais désactivé'
                 ));
-            } elseif ($user->isAccountNonExpired() == false) {
+            } elseif ($user->isAccountNonExpired() === false) {
                 return $this->render('FrontBundle:User:forget.html.twig', array(
                     'error'=>'Compte existant mais expiré'
                 ));
@@ -246,12 +246,12 @@ class UserController extends Controller
 
         }
 
-        if ($user == null || $user->isEnabled() === FALSE){
+        if ($user === null || $user->isEnabled() === FALSE){
             return $this->redirectToRoute('front_user_login', array(
                 'message'=>'Utilisateur introuvable ou désactivé'
             ));
         }
-        if ($user->getToken() == null){
+        if ($user->getToken() === null){
             $this->redirectToRoute('front_user_login', array(
                 'message'=>'Token introuvable'
             ));

@@ -23,7 +23,7 @@ class PurgeUserService
 
         foreach ($listUser as $user){
             $user->setIsNonExpired(false);
-            $em->flush();
         }
+        $em->flush();
     }
 }
