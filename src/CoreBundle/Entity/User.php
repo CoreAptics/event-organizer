@@ -347,7 +347,7 @@ class User implements AdvancedUserInterface
      *
      * @return User
      */
-    public function setIsActive($active)
+    public function setActive($active)
     {
         $this->active = $active;
 

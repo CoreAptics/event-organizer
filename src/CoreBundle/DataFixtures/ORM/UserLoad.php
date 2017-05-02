@@ -29,7 +29,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
         $user = new User();
         $user->setUsername('Test');
         $user->setFirstname('Test');
-        $user->setIsActive(1);
+        $user->setActive(1);
         $user->setUid('UID1');
         $plainPass = 'test';
         $encoder = $this->container->get('security.password_encoder');

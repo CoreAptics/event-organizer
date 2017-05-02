@@ -69,7 +69,7 @@ class UserController extends Controller
                 $user->setTokenExpiredAt($dateInSevenDays);
 
 //                Désactivation du compte
-                $user->setIsActive(FALSE);
+                $user->setActive(FALSE);
 
 //                Persistance de l'entité
                 $em->persist($user);
@@ -129,7 +129,7 @@ class UserController extends Controller
         if ($user->isEnabled() === false && $user->isAccountNonExpired() === true){
             $user->setTokenExpiredAt(null);
             $user->setToken(null);
-            $user->setIsActive(true);
+            $user->setActive(true);
             $em->flush();
             return $this->render('@Front/User/info.html.twig', array('message'=>'Votre compte a été activé avec succès.'));
 
