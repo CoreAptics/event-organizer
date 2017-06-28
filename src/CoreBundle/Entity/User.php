@@ -15,6 +15,27 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 class User implements AdvancedUserInterface
 {
     /**
+     * @ORM\OneToOne(targetEntity="CoreBundle\Entity\Cosplay", mappedBy="user")
+     */
+    private $cosplay;
+
+    /**
+     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Food", mappedBy="user")
+     */
+    private $food;
+
+    /**
+     * @ORM\OneToOne(targetEntity="CoreBundle\Entity\Event", mappedBy="eventOwner")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $eventOwner;
+
+    /**
+     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Invitation", mappedBy="user")
+     */
+    private $invitations;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -445,5 +466,131 @@ class User implements AdvancedUserInterface
     public function isNonExpired()
     {
         return $this->nonExpired;
+    }
+
+    /**
+     * Get nonExpired
+     *
+     * @return boolean
+     */
+    public function getNonExpired()
+    {
+        return $this->nonExpired;
+    }
+
+    /**
+     * Add invitation
+     *
+     * @param \CoreBundle\Entity\Invitation $invitation
+     *
+     * @return User
+     */
+    public function addInvitation(\CoreBundle\Entity\Invitation $invitation)
+    {
+        $this->invitations[] = $invitation;
+
+        return $this;
+    }
+
+    /**
+     * Remove invitation
+     *
+     * @param \CoreBundle\Entity\Invitation $invitation
+     */
+    public function removeInvitation(\CoreBundle\Entity\Invitation $invitation)
+    {
+        $this->invitations->removeElement($invitation);
+    }
+
+    /**
+     * Get invitations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInvitations()
+    {
+        return $this->invitations;
+    }
+
+    /**
+     * Set eventOwner
+     *
+     * @param \CoreBundle\Entity\Event $eventOwner
+     *
+     * @return User
+     */
+    public function setEventOwner(\CoreBundle\Entity\Event $eventOwner = null)
+    {
+        $this->eventOwner = $eventOwner;
+
+        return $this;
+    }
+
+    /**
+     * Get eventOwner
+     *
+     * @return \CoreBundle\Entity\Event
+     */
+    public function getEventOwner()
+    {
+        return $this->eventOwner;
+    }
+
+    /**
+     * Set cosplay
+     *
+     * @param \CoreBundle\Entity\Cosplay $cosplay
+     *
+     * @return User
+     */
+    public function setCosplay(\CoreBundle\Entity\Cosplay $cosplay = null)
+    {
+        $this->cosplay = $cosplay;
+
+        return $this;
+    }
+
+    /**
+     * Get cosplay
+     *
+     * @return \CoreBundle\Entity\Cosplay
+     */
+    public function getCosplay()
+    {
+        return $this->cosplay;
+    }
+
+    /**
+     * Add food
+     *
+     * @param \CoreBundle\Entity\Food $food
+     *
+     * @return User
+     */
+    public function addFood(\CoreBundle\Entity\Food $food)
+    {
+        $this->food[] = $food;
+
+        return $this;
+    }
+
+    /**
+     * Remove food
+     *
+     * @param \CoreBundle\Entity\Food $food
+     */
+    public function removeFood(\CoreBundle\Entity\Food $food)
+    {
+        $this->food->removeElement($food);
+    }
+
+    /**
+     * Get food
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFood()
+    {
+        return $this->food;
     }
 }
