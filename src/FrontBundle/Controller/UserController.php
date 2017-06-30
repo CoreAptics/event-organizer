@@ -131,6 +131,35 @@ class UserController extends Controller
         return new JsonResponse($json);
     }
 
+//    public function setInvitationAttributesAction(Request $request){
+//        $em = $this->getDoctrine()->getManager();
+//
+//
+//
+//    }
+
+    public function setInvitationStatusAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        if(!$request->get('id')){
+            $json = array();
+            $json['success'] = false;
+            $json['response']= 'Invitation edition failed';
+
+            return new JsonResponse($json);
+        }
+
+        $invitation = $em->getRepository('CoreBundle:Invitation')->find($request->get('id'));
+
+        $invitation->setStatus($request->get('status'));
+
+        $em->flush();
+
+        $json =array();
+        $json['success']= true;
+        $json['response'] = 'Invitation edition success';
+
+        return new JsonResponse($json);
+    }
 
 
 

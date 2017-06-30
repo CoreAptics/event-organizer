@@ -32,6 +32,14 @@ front_user_get_invitaitions:
     path:     /get/invitations
     defaults: { _controller: FrontBundle:User:getInvitations }
 
+front_user_set_invitaition:
+    path:     /set/invitation/attributes
+    defaults: { _controller: FrontBundle:User:setInvitationAttributes }
+
+front_user_set_invitaition_status:
+    path:     /set/invitation/status
+    defaults: { _controller: FrontBundle:User:setInvitationStatus }
+
 front_list:
     prefix: /events
     resource: event_routing.yml
