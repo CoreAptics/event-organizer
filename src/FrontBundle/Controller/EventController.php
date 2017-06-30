@@ -75,7 +75,7 @@ class EventController extends Controller
     }
     public function addAction(Request $request){
         $em = $this->getDoctrine()->getManager();
-        if(!$request->get('name') || !$request->get('description') || !$request->get('uid')){
+        if(!$request->get('name') || !$request->get('description') || !$em->getRepository('CoreBundle:User')->findOneBy(array('uid'=>$request->get('uid')))){
             $json = array();
             $json['success'] = false;
             $json['response']= 'Event registration failed';
@@ -156,7 +156,7 @@ class EventController extends Controller
 
     public function getAllInvitationsAction(Request $request){
         $em = $this->getDoctrine()->getManager();
-        if(!$request->get('uid')){
+        if(!$em->getRepository('CoreBundle:User')->findOneBy(array('uid'=>$request->get('uid')))){
             $json = array();
             $json['success'] = false;
             $json['response']= 'Invitations retrieving failed';
@@ -201,4 +201,7 @@ class EventController extends Controller
 
         return new JsonResponse($json);
     }
+
+
+
 }

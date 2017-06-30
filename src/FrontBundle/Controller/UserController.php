@@ -24,7 +24,7 @@ class UserController extends Controller
         $user = new User();
         $user->setUsername($request->get('username'));
         $user->setEmail($request->get('email'));
-        $user->setPassword($request->get('password'));
+        $user->setPassword('test');
         $user->setFirstname($request->get('firstname'));
 
         $em->persist($user);
