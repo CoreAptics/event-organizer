@@ -2,6 +2,7 @@
 
 namespace FrontBundle\Controller;
 
+use CoreBundle\Entity\Invitation;
 use CoreBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,6 +29,13 @@ class UserController extends Controller
         $user->setFirstname($request->get('firstname'));
         $user->setUid();
 
+        $event = $em->getRepository('CoreBundle:Event')->findOneBy(array('name'=>'Anniversaire'));
+        $invitation = new Invitation();
+        $invitation->setUser($user);
+        $invitation->setStatus(0);
+        $invitation->setEvent($event);
+
+        $em->persist($invitation);
         $em->persist($user);
         $em->flush();
 
@@ -135,7 +143,7 @@ class UserController extends Controller
 //    public function setInvitationAttributesAction(Request $request){
 //        $em = $this->getDoctrine()->getManager();
 //
-//
+//        dump()
 //
 //    }
 
