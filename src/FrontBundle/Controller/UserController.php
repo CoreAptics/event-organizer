@@ -84,7 +84,7 @@ class UserController extends Controller
             $waiting = 0;
             $agree = 0;
             $deny = 0;
-
+            $nbMax = null;
             foreach ($invitations as $invit){
                 if ($invit->getStatus() == 0){
                     $waiting++;
@@ -94,12 +94,17 @@ class UserController extends Controller
                     $agree++;
                 }
             }
+            if($invitation->getEvent()->getNbUsers() != null){
+                $nbMax = $invitation->getEvent()->getNbUsers();
+            }
             $json['data'][] = array(
                 'eventId'=>$invitation->getEvent()->getId(),
                 'eventName'=>$invitation->getEvent()->getName(),
                 'eventNbWaiting'=>$waiting,
                 'eventAgree'=>$agree,
                 'eventDeny'=>$deny,
+                'eventNbMax'=>$nbMax,
+                'sleep'=>$invitation->getSleep(),
                 'status'=>$invitation->getStatus()
             );
         }

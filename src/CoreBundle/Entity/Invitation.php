@@ -32,6 +32,7 @@ class Invitation
      */
     private $user;
 
+
     /**
      * @var int
      *
@@ -42,11 +43,19 @@ class Invitation
     private $id;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sleep", type="boolean")
+     */
+    private $sleep = false;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="status", type="integer")
      */
     private $status;
+
 
 
     /**
@@ -197,5 +206,29 @@ class Invitation
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set sleep
+     *
+     * @param boolean $sleep
+     *
+     * @return Invitation
+     */
+    public function setSleep($sleep)
+    {
+        $this->sleep = $sleep;
+
+        return $this;
+    }
+
+    /**
+     * Get sleep
+     *
+     * @return boolean
+     */
+    public function getSleep()
+    {
+        return $this->sleep;
     }
 }
