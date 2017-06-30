@@ -26,6 +26,7 @@ class UserController extends Controller
         $user->setEmail($request->get('email'));
         $user->setPassword('test');
         $user->setFirstname($request->get('firstname'));
+        $user->setUid();
 
         $em->persist($user);
         $em->flush();
@@ -54,6 +55,37 @@ class UserController extends Controller
         $json = array();
         $json['success'] = true;
         $json['uid'] = $user->getUid();
+
+        return new JsonResponse($json);
+    }
+
+    public function getInvitationsAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('CoreBundle:User')->findOneBy(array('uid'=>$request->get('uid')));
+
+        if(!$user){
+            $json = array();
+            $json['success'] = false;
+            $json['response']= 'Invalid user UID failed';
+
+            return new JsonResponse($json);
+        }
+
+        $listInvitation = $em->getRepository('CoreBundle:Invitation')->findBy(array(
+            'user'=>$user
+        ));
+
+        $json = array();
+        $json['success'] = true;
+        $json['data'] = array();
+
+        foreach ($listInvitation as $invitation){
+            $json['data'][] = array(
+                'eventId'=>$invitation->getEvent()->getId(),
+                'eventName'=>$invitation->getEvent()->getName(),
+                'status'=>$invitation->getStatus()
+            );
+        }
 
         return new JsonResponse($json);
     }
