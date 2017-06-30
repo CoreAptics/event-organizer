@@ -115,6 +115,7 @@ class UserController extends Controller
                 $nbMax = $invitation->getEvent()->getNbUsers();
             }
             $json['data'][] = array(
+                'id'=>$invitation->getId(),
                 'eventId'=>$invitation->getEvent()->getId(),
                 'eventName'=>$invitation->getEvent()->getName(),
                 'eventNbWaiting'=>$waiting,
