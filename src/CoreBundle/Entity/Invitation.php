@@ -42,9 +42,9 @@ class Invitation
     private $id;
 
     /**
-     * @var bool
+     * @var integer
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="integer")
      */
     private $status;
 
@@ -57,30 +57,6 @@ class Invitation
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set status
-     *
-     * @param boolean $status
-     *
-     * @return Invitation
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return bool
-     */
-    public function getStatus()
-    {
-        return $this->status;
     }
 
     /**
@@ -197,5 +173,29 @@ class Invitation
     public function getCosplay()
     {
         return $this->cosplay;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     *
+     * @return Invitation
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

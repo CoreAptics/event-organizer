@@ -28,6 +28,10 @@ front_user_reset:
     path:     /reset/{token}
     defaults: { _controller: FrontBundle:User:reset }
 
+front_user_get_invitaitions:
+    path:     /get/invitations
+    defaults: { _controller: FrontBundle:User:getInvitations }
+
 front_list:
     prefix: /events
     resource: event_routing.yml
