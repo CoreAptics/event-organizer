@@ -13,6 +13,16 @@ use Doctrine\ORM\Mapping as ORM;
 class Invitation
 {
     /**
+     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Food", mappedBy="invitation")
+     */
+    private $foods;
+
+    /**
+     * @ORM\OneToOne(targetEntity="CoreBundle\Entity\Cosplay", mappedBy="invitation")
+     */
+    private $cosplay;
+
+    /**
      * @ORM\ManyToOne(targetEntity="CoreBundle\Entity\Event", inversedBy="invitations")
      */
     private $event;
@@ -119,5 +129,73 @@ class Invitation
     public function getUser()
     {
         return $this->user;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->foods = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add food
+     *
+     * @param \CoreBundle\Entity\Food $food
+     *
+     * @return Invitation
+     */
+    public function addFood(\CoreBundle\Entity\Food $food)
+    {
+        $this->foods[] = $food;
+
+        return $this;
+    }
+
+    /**
+     * Remove food
+     *
+     * @param \CoreBundle\Entity\Food $food
+     */
+    public function removeFood(\CoreBundle\Entity\Food $food)
+    {
+        $this->foods->removeElement($food);
+    }
+
+    /**
+     * Get foods
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFoods()
+    {
+        return $this->foods;
+    }
+
+
+
+    /**
+     * Set cosplay
+     *
+     * @param \CoreBundle\Entity\Cosplay $cosplay
+     *
+     * @return Invitation
+     */
+    public function setCosplay(\CoreBundle\Entity\Cosplay $cosplay = null)
+    {
+        $this->cosplay = $cosplay;
+        $cosplay->setInvitation($this);
+
+        return $this;
+    }
+
+    /**
+     * Get cosplay
+     *
+     * @return \CoreBundle\Entity\Cosplay
+     */
+    public function getCosplay()
+    {
+        return $this->cosplay;
     }
 }

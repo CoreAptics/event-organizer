@@ -2,9 +2,9 @@ services:
 #    core.example:
 #        class: CoreBundle\Example
 #        arguments: ["@service_id", "plain_value", "%parameter%"]
-    core_purge_user:
-        class: CoreBundle\Services\PurgeUserService
-        arguments:
-            - "@doctrine.orm.entity_manager"
-        tags:
-            - { name: kernel.event_listener, event: kernel.response, method: purge }
+#    core_purge_user:
+#        class: CoreBundle\Services\PurgeUserService
+#        arguments:
+#            - "@doctrine.orm.entity_manager"
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.response, method: purge }

@@ -13,9 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Cosplay
 {
     /**
-     * @ORM\OneToOne(targetEntity="CoreBundle\Entity\User", inversedBy="cosplay")
+     * @ORM\OneToOne(targetEntity="CoreBundle\Entity\Invitation", inversedBy="cosplay")
      */
-    private $user;
+    private $invitation;
 
     /**
      * @var int
@@ -68,27 +68,29 @@ class Cosplay
         return $this->name;
     }
 
+
+
     /**
-     * Set user
+     * Set invitation
      *
-     * @param \CoreBundle\Entity\User $user
+     * @param \CoreBundle\Entity\Invitation $invitation
      *
      * @return Cosplay
      */
-    public function setUser(\CoreBundle\Entity\User $user = null)
+    public function setInvitation(\CoreBundle\Entity\Invitation $invitation = null)
     {
-        $this->user = $user;
+        $this->invitation = $invitation;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get invitation
      *
-     * @return \CoreBundle\Entity\User
+     * @return \CoreBundle\Entity\Invitation
      */
-    public function getUser()
+    public function getInvitation()
     {
-        return $this->user;
+        return $this->invitation;
     }
 }

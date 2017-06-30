@@ -13,9 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Food
 {
     /**
-     * @ORM\ManyToOne(targetEntity="CoreBundle\Entity\User", inversedBy="foods")
+     * @ORM\ManyToOne(targetEntity="CoreBundle\Entity\Invitation", inversedBy="foods")
      */
-    private $user;
+    private $invitation;
 
     /**
      * @ORM\ManyToOne(targetEntity="CoreBundle\Entity\FoodType", inversedBy="foods")
@@ -128,27 +128,28 @@ class Food
         return $this->type;
     }
 
+
     /**
-     * Set user
+     * Set invitation
      *
-     * @param \CoreBundle\Entity\User $user
+     * @param \CoreBundle\Entity\Invitation $invitation
      *
      * @return Food
      */
-    public function setUser(\CoreBundle\Entity\User $user = null)
+    public function setInvitation(\CoreBundle\Entity\Invitation $invitation = null)
     {
-        $this->user = $user;
+        $this->invitation = $invitation;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get invitation
      *
-     * @return \CoreBundle\Entity\User
+     * @return \CoreBundle\Entity\Invitation
      */
-    public function getUser()
+    public function getInvitation()
     {
-        return $this->user;
+        return $this->invitation;
     }
 }

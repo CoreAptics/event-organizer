@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Event
 {
     /**
-     * @ORM\OneToOne(targetEntity="CoreBundle\Entity\User", inversedBy="eventOwner")
+     * @ORM\ManyToOne(targetEntity="CoreBundle\Entity\User", inversedBy="events")
      */
     private $eventOwner;
 
@@ -48,30 +48,37 @@ class Event
     /**
      * @var int
      *
-     * @ORM\Column(name="nbUsers", type="integer")
+     * @ORM\Column(name="nbUsers", type="integer", nullable=true)
      */
     private $nbUsers;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="latitude", type="float")
+     * @ORM\Column(name="latitude", type="float", nullable=true)
      */
     private $latitude;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="longitude", type="float")
+     * @ORM\Column(name="longitude", type="float", nullable=true)
      */
     private $longitude;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", nullable=true)
+     * @ORM\Column(name="phone", type="string", nullable=true, nullable=true)
      */
     private $phone;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
 
 
     /**
@@ -291,5 +298,29 @@ class Event
     public function getEventOwner()
     {
         return $this->eventOwner;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return Event
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 }

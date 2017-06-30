@@ -1,0 +1,19 @@
+front_event_list:
+    path:     /list
+    defaults: { _controller: FrontBundle:Event:list }
+
+front_event_view:
+    path:     /view
+    defaults: { _controller: FrontBundle:Event:view }
+
+front_event_add:
+    path:     /add
+    defaults: { _controller: FrontBundle:Event:add }
+
+front_event_edit:
+    path:     /edit
+    defaults: { _controller: FrontBundle:Event:edit }
+
+front_event_get_invitations:
+    path:     /get/invitations
+    defaults: { _controller: FrontBundle:Event:getAllInvitations }

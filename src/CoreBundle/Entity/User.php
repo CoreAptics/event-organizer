@@ -15,20 +15,10 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 class User implements AdvancedUserInterface
 {
     /**
-     * @ORM\OneToOne(targetEntity="CoreBundle\Entity\Cosplay", mappedBy="user")
-     */
-    private $cosplay;
-
-    /**
-     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Food", mappedBy="user")
-     */
-    private $food;
-
-    /**
-     * @ORM\OneToOne(targetEntity="CoreBundle\Entity\Event", mappedBy="eventOwner")
+     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Event", mappedBy="eventOwner")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $eventOwner;
+    private $events;
 
     /**
      * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Invitation", mappedBy="user")
@@ -72,19 +62,6 @@ class User implements AdvancedUserInterface
      */
     private $password;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="token", type="string", length=255, unique=true, nullable=true)
-     */
-    private $token;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="token_expired_at", type="datetime", nullable=true)
-     */
-    private $tokenExpiredAt;
 
     /**
      * @var \DateTime
@@ -107,29 +84,13 @@ class User implements AdvancedUserInterface
      */
     private $uid;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_active", type="boolean")
-     */
-    private $active = 0;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_non_expired", type="boolean")
-     */
-    private $nonExpired = 1;
 
 
     /*********************************
      *       SETTER ET GETTER        *
      *********************************/
 
-    public function __construct()
-    {
-        $this->active = true;
-    }
+
 
     /**
      * Get id
@@ -251,39 +212,6 @@ class User implements AdvancedUserInterface
         return $this;
     }
 
-    /**
-     * Get token
-     *
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * Set tokenExpiredAt
-     *
-     * @param \DateTime $tokenExpiredAt
-     *
-     * @return User
-     */
-    public function setTokenExpiredAt($tokenExpiredAt)
-    {
-        $this->tokenExpiredAt = $tokenExpiredAt;
-
-        return $this;
-    }
-
-    /**
-     * Get tokenExpiredAt
-     *
-     * @return \DateTime
-     */
-    public function getTokenExpiredAt()
-    {
-        return $this->tokenExpiredAt;
-    }
 
     /**
      * Set createdAt
@@ -344,9 +272,9 @@ class User implements AdvancedUserInterface
      *
      * @return User
      */
-    public function setUid($uid)
+    public function setUid()
     {
-        $this->uid = $uid;
+        $this->uid = uniqid();
 
         return $this;
     }
@@ -359,30 +287,6 @@ class User implements AdvancedUserInterface
     public function getUid()
     {
         return $this->uid;
-    }
-
-    /**
-     * Set isActive
-     *
-     * @param boolean $active
-     *
-     * @return User
-     */
-    public function setActive($active)
-    {
-        $this->active = $active;
-
-        return $this;
-    }
-
-    /**
-     * Get isActive
-     *
-     * @return boolean
-     */
-    public function getActive()
-    {
-        return $this->active;
     }
 
 
@@ -403,7 +307,7 @@ class User implements AdvancedUserInterface
 
     public function isAccountNonExpired()
     {
-        return $this->nonExpired;
+        return true;
     }
 
     public function isAccountNonLocked()
@@ -418,7 +322,7 @@ class User implements AdvancedUserInterface
 
     public function isEnabled()
     {
-        return $this->active;
+        return true;
     }
 
     public function serialize()
@@ -427,8 +331,6 @@ class User implements AdvancedUserInterface
             $this->id,
             $this->password,
             $this->username,
-            $this->active,
-            $this->nonExpired
         ));
     }
 
@@ -512,29 +414,6 @@ class User implements AdvancedUserInterface
         return $this->invitations;
     }
 
-    /**
-     * Set eventOwner
-     *
-     * @param \CoreBundle\Entity\Event $eventOwner
-     *
-     * @return User
-     */
-    public function setEventOwner(\CoreBundle\Entity\Event $eventOwner = null)
-    {
-        $this->eventOwner = $eventOwner;
-
-        return $this;
-    }
-
-    /**
-     * Get eventOwner
-     *
-     * @return \CoreBundle\Entity\Event
-     */
-    public function getEventOwner()
-    {
-        return $this->eventOwner;
-    }
 
     /**
      * Set cosplay
@@ -592,5 +471,47 @@ class User implements AdvancedUserInterface
     public function getFood()
     {
         return $this->food;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->food = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->invitations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add event
+     *
+     * @param \CoreBundle\Entity\Event $event
+     *
+     * @return User
+     */
+    public function addEvent(\CoreBundle\Entity\Event $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
+    }
+
+    /**
+     * Remove event
+     *
+     * @param \CoreBundle\Entity\Event $event
+     */
+    public function removeEvent(\CoreBundle\Entity\Event $event)
+    {
+        $this->events->removeElement($event);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

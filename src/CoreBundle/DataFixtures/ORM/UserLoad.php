@@ -2,6 +2,11 @@
 
 namespace CoreBundle\DataFixtures\ORM;
 
+use CoreBundle\Entity\Cosplay;
+use CoreBundle\Entity\Event;
+use CoreBundle\Entity\Food;
+use CoreBundle\Entity\FoodType;
+use CoreBundle\Entity\Invitation;
 use CoreBundle\Entity\User;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -28,16 +33,45 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
     {
         $user = new User();
         $user->setUsername('Test');
-        $user->setFirstname('Test');
-        $user->setActive(1);
-        $user->setUid('UID1');
-        $plainPass = 'test';
-        $encoder = $this->container->get('security.password_encoder');
-        $encodedPass = $encoder->encodePassword($user, $plainPass);
-        $user->setPassword($encodedPass);
+        $user->setFirstname('test');
         $user->setEmail('test@test.com');
-
+        $user->setPassword('test');
+        $user->setUid();
         $manager->persist($user);
+
+        $foodType = new FoodType();
+        $foodType->setName('Boissons');
+        $manager->persist($foodType);
+
+        $foodType = new FoodType();
+        $foodType->setName('Nourriture');
+        $manager->persist($foodType);
+
+        $event = new Event();
+        $event->setEventOwner($user);
+        $event->setName('Anniversaire');
+        $event->setDate(new \DateTime());
+        $event->setDescription('Test');
+        $manager->persist($event);
+
+        $cosplay = new Cosplay();
+        $cosplay->setName('Morphsuit');
+        $manager->persist($cosplay);
+
+        $food = new Food();
+        $food->setName('Chips');
+        $food->setNb(2);
+        $food->setType($foodType);
+        $manager->persist($food);
+
+        $invitation = new Invitation();
+        $invitation->setCosplay($cosplay);
+        $invitation->addFood($food);
+        $invitation->setUser($user);
+        $invitation->setStatus(0);
+        $invitation->setEvent($event);
+        $manager->persist($invitation);
+
         $manager->flush();
     }
     public function getOrder()

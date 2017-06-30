@@ -27,3 +27,7 @@ front_user_forget_pass:
 front_user_reset:
     path:     /reset/{token}
     defaults: { _controller: FrontBundle:User:reset }
+
+front_list:
+    prefix: /events
+    resource: event_routing.yml
