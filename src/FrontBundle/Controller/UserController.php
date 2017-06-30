@@ -38,13 +38,24 @@ class UserController extends Controller
         return new JsonResponse($json);
     }
 
-    public function loginAction(){
-        $authenticationUtils = $this->get('security.authentication_utils');
-        
-        return $this->render('@Front/User/login.html.twig', array(
-            'last_username' => $authenticationUtils->getLastUsername(),
-            'error'         => $authenticationUtils->getLastAuthenticationError(),
-        ));
+    public function loginAction(Request $request){
+        $em= $this->getDoctrine()->getManager();
+
+        if(!$em->getRepository('CoreBundle:User')->findOneBy(array('email'=>$request->get('email'))) or !$request->get('email')){
+            $json = array();
+            $json['success'] = false;
+            $json['response']= 'Login failed';
+
+            return new JsonResponse($json);
+        }
+
+        $user = $em->getRepository('CoreBundle:User')->findOneBy(array('email'=>$request->get('email')));
+
+        $json = array();
+        $json['success'] = true;
+        $json['uid'] = $user->getUid();
+
+        return new JsonResponse($json);
     }
 
 
