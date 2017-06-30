@@ -80,9 +80,26 @@ class UserController extends Controller
         $json['data'] = array();
 
         foreach ($listInvitation as $invitation){
+            $invitations = $invitation->getEvent()->getInvitations();
+            $waiting = 0;
+            $agree = 0;
+            $deny = 0;
+
+            foreach ($invitations as $invit){
+                if ($invit->getStatus() == 0){
+                    $waiting++;
+                } elseif ($invit->getStatus == 1){
+                    $deny++;
+                } elseif ($invit->getStatus() == 2){
+                    $agree++;
+                }
+            }
             $json['data'][] = array(
                 'eventId'=>$invitation->getEvent()->getId(),
                 'eventName'=>$invitation->getEvent()->getName(),
+                'eventNbWaiting'=>$waiting,
+                'eventAgree'=>$agree,
+                'eventDeny'=>$deny,
                 'status'=>$invitation->getStatus()
             );
         }
