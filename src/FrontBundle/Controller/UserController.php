@@ -85,6 +85,7 @@ class UserController extends Controller
             $agree = 0;
             $deny = 0;
             $nbMax = null;
+            $foods = array();
             foreach ($invitations as $invit){
                 if ($invit->getStatus() == 0){
                     $waiting++;
@@ -93,6 +94,13 @@ class UserController extends Controller
                 } elseif ($invit->getStatus() == 2){
                     $agree++;
                 }
+            }
+            foreach ($invitation->getFoods() as $food){
+                $foods[] = array(
+                    'name'=>$food->getName(),
+                    'type'=>$food->getType()->getName(),
+                    'quantity'=>$food->getNb(),
+                );
             }
             if($invitation->getEvent()->getNbUsers() != null){
                 $nbMax = $invitation->getEvent()->getNbUsers();
@@ -105,6 +113,10 @@ class UserController extends Controller
                 'eventDeny'=>$deny,
                 'eventNbMax'=>$nbMax,
                 'sleep'=>$invitation->getSleep(),
+                'cosplay'=>array(
+                    'name'=>$invitation->getCosplay()->getName()
+                ),
+                'food'=>$foods,
                 'status'=>$invitation->getStatus()
             );
         }
