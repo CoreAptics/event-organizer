@@ -95,13 +95,16 @@ class UserController extends Controller
                     $agree++;
                 }
             }
-            foreach ($invitation->getFoods() as $food){
-                $foods[] = array(
-                    'name'=>$food->getName(),
-                    'type'=>$food->getType()->getName(),
-                    'quantity'=>$food->getNb(),
-                );
+            if(count($invitation->getFoods()) != 0){
+                foreach ($invitation->getFoods() as $food){
+                    $foods[] = array(
+                        'name'=>$food->getName(),
+                        'type'=>$food->getType()->getName(),
+                        'quantity'=>$food->getNb(),
+                    );
+                }
             }
+
             if($invitation->getEvent()->getNbUsers() != null){
                 $nbMax = $invitation->getEvent()->getNbUsers();
             }
