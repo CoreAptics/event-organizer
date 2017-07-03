@@ -100,7 +100,7 @@ class UserController extends Controller
             foreach ($invitations as $invit){
                 if ($invit->getStatus() == 0){
                     $waiting++;
-                } elseif ($invit->getStatus == 1){
+                } elseif ($invit->getStatus() == 1){
                     $deny++;
                 } elseif ($invit->getStatus() == 2){
                     $agree++;
