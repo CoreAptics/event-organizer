@@ -189,6 +189,72 @@ class UserController extends Controller
 
     }
 
+    public function getAllInvitationsAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        if(!$request->get('uid')){
+            $json = array();
+            $json['success'] = false;
+            $json['response']= 'Invitations retrieving failed';
+
+            return new JsonResponse($json);
+        }
+
+        $invitation = $em->getRepository('CoreBundle:Invitation')->findOneBy(array('user'=>$em->getRepository('CoreBundle:User')->findOneBy(array('uid'=>$request->get('uid')))));
+
+        $listInvitation = $invitation->getEvent()->getInvitations();
+
+        foreach ($listInvitation as $invitation){
+            $invitations = $invitation->getEvent()->getInvitations();
+            $waiting = 0;
+            $agree = 0;
+            $deny = 0;
+            $nbMax = null;
+            $foods = array();
+            $cosplay = array();
+            foreach ($invitations as $invit){
+                if ($invit->getStatus() == 0){
+                    $waiting++;
+                } elseif ($invit->getStatus() == 1){
+                    $deny++;
+                } elseif ($invit->getStatus() == 2){
+                    $agree++;
+                }
+            }
+
+            if($invitation->getCosplay() != null){
+                $cosplay = array(
+                    'name'=>$invitation->getCosplay()->getName()
+                );
+            }
+            if(count($invitation->getFoods()) != 0){
+                foreach ($invitation->getFoods() as $food){
+                    $foods[] = array(
+                        'name'=>$food->getName(),
+                        'type'=>$food->getType()->getName(),
+                        'quantity'=>$food->getNb(),
+                    );
+                }
+            }
+
+            if($invitation->getEvent()->getNbUsers() != null){
+                $nbMax = $invitation->getEvent()->getNbUsers();
+            }
+            $json['data'][] = array(
+                'id'=>$invitation->getId(),
+                'user'=>array(
+                    'username'=>$invitation->getUser()->getUsername(),
+                    'firstname'=>$invitation->getUser()->getFirstname()
+                ),
+                'sleep'=>$invitation->getSleep(),
+                'cosplay'=>$cosplay,
+                'food'=>$foods,
+                'status'=>$invitation->getStatus()
+            );
+        }
+
+        return new JsonResponse($json);
+    }
+
     public function setInvitationStatusAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         if(!$request->get('id')){
