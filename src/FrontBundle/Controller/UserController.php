@@ -157,6 +157,7 @@ class UserController extends Controller
             $cosplay = new Cosplay();
             $cosplay->setName($cosplayName);
             $cosplay->setInvitation($invitation);
+            $em->persist($cosplay);
         } else {
             $invitation->getCosplay()->setName($cosplayName);
         }
