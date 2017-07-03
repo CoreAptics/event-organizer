@@ -2,6 +2,8 @@
 
 namespace FrontBundle\Controller;
 
+use CoreBundle\Entity\Cosplay;
+use CoreBundle\Entity\Food;
 use CoreBundle\Entity\Invitation;
 use CoreBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -140,12 +142,51 @@ class UserController extends Controller
         return new JsonResponse($json);
     }
 
-//    public function setInvitationAttributesAction(Request $request){
-//        $em = $this->getDoctrine()->getManager();
-//
-//        dump()
-//
-//    }
+    public function setInvitationAttributesAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $json = json_decode($request->get('json'));
+
+        $uid = $json->id;
+        $sleep = $json->sleep;
+        $cosplayName = $json->costume;
+        $foods = $json->food;
+
+        $invitation = $em->getRepository('CoreBundle:Invitation')->findOneBy(array('user'=>$em->getRepository('CoreBundle:User')->findOneBy(array('uid'=>$uid))));
+        $invitation->setSleep($sleep);
+        if($invitation->getCosplay() == null){
+            $cosplay = new Cosplay();
+            $cosplay->setName($cosplayName);
+            $cosplay->setInvitation($invitation);
+        } else {
+            $invitation->getCosplay()->setName($cosplayName);
+        }
+        $currentFoods = $em->getRepository('CoreBundle:Food')->findBy(array('invitation'=>$invitation));
+
+        foreach ($currentFoods as $food){
+            $em->remove($food);
+        }
+
+        foreach ($foods as $food){
+            if($food->name  == null || $food->quantity  == 0 || $food->category == null || $food->name == ""){
+                continue;
+            }
+            $newFood = new Food();
+            $newFood->setName($food->name);
+            $newFood->setNb($food->quantity);
+            $type = $em->getRepository('CoreBundle:FoodType')->findOneBy(array('name'=>$food->category));
+            $newFood->setType($type);
+            $newFood->setInvitation($invitation);
+            $em->persist($newFood);
+        }
+
+        $em->flush();
+
+        $json = array();
+        $json['success'] = true;
+        $json['response'] = 'Invitation edition success';
+        return new JsonResponse($json);
+
+    }
 
     public function setInvitationStatusAction(Request $request){
         $em = $this->getDoctrine()->getManager();
